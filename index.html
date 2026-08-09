@@ -1,21 +1,668 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <title>Pika App</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Pika App — a simple demonstration of a modern containerized application running on AWS." />
+  <title>Pika App | Welcome</title>
+
   <style>
-    body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #f0f4f8; }
-    .box { text-align: center; background: white; padding: 40px 60px; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.1); }
-    h1 { color: #1a1a2e; }
-    p { color: #7a7065; }
-    .badge { background: #b5892a; color: white; padding: 4px 12px; border-radius: 999px; font-size: 0.8rem; }
+    :root {
+      --primary: #b5892a;
+      --primary-dark: #8f6b1e;
+      --navy: #101828;
+      --text: #344054;
+      --muted: #667085;
+      --light: #f8fafc;
+      --border: #eaecf0;
+      --white: #ffffff;
+      --success: #12b76a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background: var(--white);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(1120px, 92%);
+      margin: 0 auto;
+    }
+
+    /* Navigation */
+
+    nav {
+      border-bottom: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.96);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .nav-inner {
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .logo-mark {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      background: var(--primary);
+      color: white;
+      font-weight: 800;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary-dark);
+    }
+
+    /* Hero */
+
+    .hero {
+      background:
+        radial-gradient(circle at top right, rgba(181, 137, 42, 0.12), transparent 35%),
+        linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+      padding: 100px 0 90px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 70px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #fff8e7;
+      color: var(--primary-dark);
+      border: 1px solid #f2dfac;
+      padding: 7px 14px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-bottom: 22px;
+    }
+
+    .eyebrow-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--success);
+      border-radius: 50%;
+    }
+
+    h1 {
+      color: var(--navy);
+      font-size: clamp(2.7rem, 6vw, 4.7rem);
+      line-height: 1.05;
+      letter-spacing: -2px;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 span {
+      color: var(--primary);
+    }
+
+    .hero-text {
+      color: var(--muted);
+      font-size: 1.15rem;
+      max-width: 650px;
+      margin-bottom: 32px;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 13px 21px;
+      border-radius: 8px;
+      font-weight: 700;
+      border: 1px solid transparent;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-secondary {
+      border-color: var(--border);
+      color: var(--navy);
+      background: white;
+    }
+
+    .btn-secondary:hover {
+      border-color: #cfd4dc;
+    }
+
+    /* Status card */
+
+    .status-card {
+      background: var(--navy);
+      color: white;
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 0 24px 60px rgba(16, 24, 40, 0.16);
+    }
+
+    .status-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+
+    .status-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .status-live {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: #8ff0bd;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .status-live span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+    }
+
+    .status-card h2 {
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+    }
+
+    .status-card p {
+      color: #98a2b3;
+      margin-bottom: 28px;
+    }
+
+    .status-list {
+      border-top: 1px solid #344054;
+    }
+
+    .status-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 14px 0;
+      border-bottom: 1px solid #344054;
+      font-size: 0.9rem;
+    }
+
+    .status-row span:first-child {
+      color: #98a2b3;
+    }
+
+    .status-row span:last-child {
+      color: white;
+      font-weight: 600;
+    }
+
+    /* Features */
+
+    .section {
+      padding: 90px 0;
+    }
+
+    .section-heading {
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto 48px;
+    }
+
+    .section-heading h2 {
+      color: var(--navy);
+      font-size: 2.3rem;
+      margin-bottom: 12px;
+    }
+
+    .section-heading p {
+      color: var(--muted);
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .feature {
+      padding: 30px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: white;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .feature:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(16, 24, 40, 0.08);
+    }
+
+    .feature-icon {
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: #fff8e7;
+      color: var(--primary-dark);
+      font-size: 1.25rem;
+      margin-bottom: 20px;
+    }
+
+    .feature h3 {
+      color: var(--navy);
+      margin-bottom: 9px;
+    }
+
+    .feature p {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    /* Architecture */
+
+    .architecture {
+      background: var(--light);
+    }
+
+    .architecture-box {
+      max-width: 900px;
+      margin: 0 auto;
+      background: var(--navy);
+      color: white;
+      padding: 38px;
+      border-radius: 18px;
+      text-align: center;
+    }
+
+    .architecture-box h2 {
+      margin-bottom: 12px;
+    }
+
+    .architecture-box p {
+      color: #98a2b3;
+      margin-bottom: 30px;
+    }
+
+    .stack {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .stack-item {
+      padding: 12px 18px;
+      background: #1d2939;
+      border: 1px solid #344054;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .arrow {
+      color: var(--primary);
+      font-weight: 800;
+    }
+
+    /* CTA */
+
+    .cta {
+      padding: 90px 0;
+      text-align: center;
+    }
+
+    .cta h2 {
+      color: var(--navy);
+      font-size: 2.4rem;
+      margin-bottom: 14px;
+    }
+
+    .cta p {
+      color: var(--muted);
+      max-width: 600px;
+      margin: 0 auto 28px;
+    }
+
+    /* Footer */
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 0;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .footer-badge {
+      background: #f2f4f7;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+    }
+
+    /* Responsive */
+
+    @media (max-width: 800px) {
+      .hero {
+        padding: 70px 0;
+      }
+
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 45px;
+      }
+
+      .features {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      h1 {
+        letter-spacing: -1px;
+      }
+    }
   </style>
+
 </head>
+
 <body>
-  <div class="box">
-    <h1>Hello World! 👋</h1>
-    <p>Pika App is running successfully</p>
-    <span class="badge">Nginx + Docker + ECR</span>
+
+  <nav>
+    <div class="container nav-inner">
+      <a href="#" class="logo">
+        <div class="logo-mark">P</div>
+        Pika App
+      </a>
+
+```
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#architecture">Architecture</a>
+    <a href="#status">Status</a>
   </div>
+</div>
+```
+
+  </nav>
+
+  <main>
+
+```
+<section class="hero" id="status">
+  <div class="container hero-grid">
+
+    <div>
+      <div class="eyebrow">
+        <span class="eyebrow-dot"></span>
+        Deployment online
+      </div>
+
+      <h1>
+        Simple application.<br />
+        <span>Serious infrastructure.</span>
+      </h1>
+
+      <p class="hero-text">
+        Welcome to Pika — a lightweight demonstration application running
+        on a modern containerized AWS infrastructure with automated
+        deployment through GitHub Actions.
+      </p>
+
+      <div class="buttons">
+        <a href="#features" class="btn btn-primary">Explore Pika</a>
+        <a href="#architecture" class="btn btn-secondary">View Architecture</a>
+      </div>
+    </div>
+
+    <div class="status-card">
+      <div class="status-header">
+        <div class="status-title">System Status</div>
+
+        <div class="status-live">
+          <span></span>
+          LIVE
+        </div>
+      </div>
+
+      <h2>Everything is running.</h2>
+
+      <p>
+        The application is currently serving traffic successfully.
+      </p>
+
+      <div class="status-list">
+        <div class="status-row">
+          <span>Application</span>
+          <span>Online</span>
+        </div>
+
+        <div class="status-row">
+          <span>Container</span>
+          <span>Running</span>
+        </div>
+
+        <div class="status-row">
+          <span>Deployment</span>
+          <span>Automated</span>
+        </div>
+
+        <div class="status-row">
+          <span>Environment</span>
+          <span>Development</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="section" id="features">
+  <div class="container">
+
+    <div class="section-heading">
+      <h2>Built to demonstrate the full stack</h2>
+      <p>
+        Pika keeps the application intentionally simple while the
+        infrastructure demonstrates a production-minded deployment model.
+      </p>
+    </div>
+
+    <div class="features">
+
+      <div class="feature">
+        <div class="feature-icon">⚡</div>
+        <h3>Automated Deployments</h3>
+        <p>
+          Code changes pushed to the main branch can automatically build,
+          publish, and deploy a new application version.
+        </p>
+      </div>
+
+      <div class="feature">
+        <div class="feature-icon">☁️</div>
+        <h3>Cloud Native</h3>
+        <p>
+          The application runs as a containerized workload on AWS using
+          managed cloud services.
+        </p>
+      </div>
+
+      <div class="feature">
+        <div class="feature-icon">🔐</div>
+        <h3>Secure Access</h3>
+        <p>
+          GitHub Actions authenticates to AWS through OIDC rather than
+          relying on long-lived AWS credentials.
+        </p>
+      </div>
+
+      <div class="feature">
+        <div class="feature-icon">📦</div>
+        <h3>Containerized</h3>
+        <p>
+          The application is packaged as a Docker image and stored in
+          Amazon ECR for deployment.
+        </p>
+      </div>
+
+      <div class="feature">
+        <div class="feature-icon">🔄</div>
+        <h3>Versioned Releases</h3>
+        <p>
+          Each application build can be associated with a Git commit,
+          providing traceability between source code and deployment.
+        </p>
+      </div>
+
+      <div class="feature">
+        <div class="feature-icon">🛡️</div>
+        <h3>Least Privilege</h3>
+        <p>
+          The application deployment role receives only the permissions
+          required to publish images and update the ECS service.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="section architecture" id="architecture">
+  <div class="container">
+
+    <div class="architecture-box">
+      <h2>Pika Deployment Pipeline</h2>
+
+      <p>
+        A simple code change travels through an automated cloud delivery
+        pipeline before reaching the running application.
+      </p>
+
+      <div class="stack">
+        <div class="stack-item">GitHub</div>
+        <div class="arrow">→</div>
+        <div class="stack-item">GitHub Actions</div>
+        <div class="arrow">→</div>
+        <div class="stack-item">OIDC</div>
+        <div class="arrow">→</div>
+        <div class="stack-item">Docker</div>
+        <div class="arrow">→</div>
+        <div class="stack-item">Amazon ECR</div>
+        <div class="arrow">→</div>
+        <div class="stack-item">Amazon ECS</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="cta">
+  <div class="container">
+    <h2>Small application. Big learning.</h2>
+
+    <p>
+      Pika is a practical cloud engineering project designed to turn
+      infrastructure concepts into a working deployment.
+    </p>
+
+    <a href="#status" class="btn btn-primary">
+      Check System Status
+    </a>
+  </div>
+</section>
+```
+
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <div>
+        © 2026 Pika App. Built for cloud engineering practice.
+      </div>
+
+```
+  <div class="footer-badge">
+    Nginx · Docker · ECR · ECS · GitHub Actions
+  </div>
+</div>
+```
+
+  </footer>
+
 </body>
 </html>
