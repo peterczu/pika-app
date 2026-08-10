@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - staging
-  workflow_dispatch:
 
 permissions:
   id-token: write
@@ -13,7 +12,7 @@ permissions:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-    environments: staging
+    environment: staging
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
